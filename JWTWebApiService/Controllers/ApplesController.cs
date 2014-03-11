@@ -21,6 +21,7 @@ namespace JWTWebApiService.Controllers
             return _applesRepository.ListAll();
         }
 
+        [Authorize]
         public HttpResponseMessage Get(string id)
         {
             var apple =  _applesRepository.GetById(id);

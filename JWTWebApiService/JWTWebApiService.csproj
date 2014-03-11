@@ -51,6 +51,7 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Tokens.Jwt">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.1.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
@@ -99,6 +100,7 @@
     <Compile Include="Repositories\ApplesRepository.cs" />
     <Compile Include="Utilities\IocContainer.cs" />
     <Compile Include="Utilities\FakeData.cs" />
+    <Compile Include="Utilities\JwtHandlerGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -125,7 +127,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1531</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:5561</IISUrl>
+          <IISUrl>http://localhost:5560</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
