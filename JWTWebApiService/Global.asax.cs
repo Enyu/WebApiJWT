@@ -2,7 +2,6 @@
 using System.Web.Http;
 using System.Web.Routing;
 using JWTWebApiService.Utilities;
-using Ninject;
 using WebApiContrib.IoC.Ninject;
 
 namespace JWTWebApiService
