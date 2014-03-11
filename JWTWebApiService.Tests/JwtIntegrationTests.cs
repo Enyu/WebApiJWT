@@ -1,7 +1,13 @@
 ﻿using System;
+using System.IdentityModel.Tokens;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using FluentAssertions;
+using JWTWebApiService.Entities;
 using NUnit.Framework;
 
 namespace JWTWebApiService.Tests
@@ -24,6 +30,41 @@ namespace JWTWebApiService.Tests
             var response = client.GetAsync("api/apples/1").Result;
 
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        [Test]
+        public void should_pass_when_client_with_token()
+        {
+            var client = new HttpClient { BaseAddress = ApiUrl };
+            AddAuthHeader(client);
+            var response = client.GetAsync("api/apples/1").Result;
+
+            response.StatusCode.Should().Be(HttpStatusCode.Found);
+            var apple = response.Content.ReadAsAsync<Apple>();
+            apple.Id.Should().Be(1);
+        }
+
+        private static void AddAuthHeader(HttpClient client, string audience = "http://www.enyu.com")
+        {
+            var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadOnly);
+
+            var signingCert = store.Certificates
+                .Cast<X509Certificate2>()
+                .FirstOrDefault(certificate => certificate.Subject == CertificateName);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                TokenIssuerName = "DMN",
+                AppliesToAddress = audience,
+                SigningCredentials = new X509SigningCredentials(signingCert)
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenString);
         }
     }
 }
